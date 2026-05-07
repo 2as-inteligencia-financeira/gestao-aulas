@@ -1,12 +1,25 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+// ALTO-03: CORS restrito ao domínio do gestao-aulas
+const ALLOWED_ORIGINS = [
+  'https://aulas.luniqfinancas.com',
+  'http://localhost:5173',
+  'http://localhost:5174',
+];
 
-const SPREADSHEET_ID = '16dLgqONuxIQU2xbN7_IHQ--HFyoJk7jTTZBFkfrXJLI';
-const CADASTRO_GID   = '1448507810';
+function corsHeaders(req: Request) {
+  const origin = req.headers.get('origin') ?? '';
+  const allowed = ALLOWED_ORIGINS.includes(origin) ? origin : '';
+  return {
+    'Access-Control-Allow-Origin': allowed || 'null',
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Vary': 'Origin',
+  };
+}
+
+// ALTO-06: ID da planilha via env var (nunca hardcoded)
+const SPREADSHEET_ID = Deno.env.get('SYNC_SPREADSHEET_ID') ?? '16dLgqONuxIQU2xbN7_IHQ--HFyoJk7jTTZBFkfrXJLI';
+const CADASTRO_GID   = Deno.env.get('SYNC_CADASTRO_GID')   ?? '1448507810';
 
 // ── JWT helper (Web Crypto — Deno nativo) ─────────────────────────────────────
 
@@ -165,7 +178,8 @@ function mapRow(headers: string[], row: string[]): Record<string, unknown> | nul
 // ── Handler principal ─────────────────────────────────────────────────────────
 
 Deno.serve(async (req) => {
-  if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
+  const headers = corsHeaders(req);
+  if (req.method === 'OPTIONS') return new Response('ok', { headers });
 
   try {
     // Valida chamador autenticado e admin
@@ -212,13 +226,18 @@ Deno.serve(async (req) => {
         sincronizados: professores.length,
         headers,   // retorna cabeçalhos para debug
       }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 },
+      { headers: { ...headers, 'Content-Type': 'application/json' }, status: 200 },
     );
 
   } catch (err: any) {
+    // BAIXO-05: não expõe detalhes internos ao cliente
+    const safe = ['Não autorizado', 'Token inválido', 'Permissão negada — apenas admins podem sincronizar',
+      'Planilha vazia ou sem dados', 'Nenhum professor mapeado. Verifique os cabeçalhos da aba Cadastro.',
+    ].includes(err?.message) ? err.message : 'Erro ao sincronizar professores.';
+
     return new Response(
-      JSON.stringify({ error: err.message }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 },
+      JSON.stringify({ error: safe }),
+      { headers: { ...headers, 'Content-Type': 'application/json' }, status: 400 },
     );
   }
 });

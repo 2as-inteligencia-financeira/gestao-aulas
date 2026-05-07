@@ -2,10 +2,17 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 
+// ALTO-02: origens autorizadas a enviar token via postMessage
+const TRUSTED_HUB_ORIGINS = [
+  'https://hub.luniqfinancas.com',
+  'https://app.luniqfinancas.com',
+  ...(import.meta.env.DEV ? ['http://localhost:5173', 'http://localhost:3000'] : []),
+];
+
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [session, setSession]   = useState(undefined); // undefined = carregando
+  const [session, setSession]   = useState(undefined);
   const [profile, setProfile]   = useState(null);
 
   async function fetchProfile(userId) {
@@ -18,24 +25,42 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    // Trata tokens vindos do hub via URL
-    const params = new URLSearchParams(window.location.search);
-    const access = params.get('sb_access_token');
-    const refresh = params.get('sb_refresh_token');
-    const initSession = access && refresh
-      ? supabase.auth.setSession({ access_token: access, refresh_token: refresh }).then(() => {
-          params.delete('sb_access_token');
-          params.delete('sb_refresh_token');
-          window.history.replaceState({}, '', [window.location.pathname, params.toString()].filter(Boolean).join('?'));
-        })
-      : Promise.resolve();
+    const initSession = async () => {
+      // ALTO-02: recebe token do hub via postMessage (nunca via URL)
+      if (window.opener && !window.opener.closed) {
+        await new Promise((resolve) => {
+          const timeout = setTimeout(resolve, 10_000);
 
-    initSession.then(() => {
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        setSession(session);
-        if (session?.user) fetchProfile(session.user.id);
-      });
-    });
+          const handler = async (event) => {
+            if (!TRUSTED_HUB_ORIGINS.includes(event.origin)) return;
+            if (event.data?.type !== 'painel:token') return;
+            clearTimeout(timeout);
+            window.removeEventListener('message', handler);
+            const { access_token, refresh_token } = event.data;
+            if (access_token && refresh_token) {
+              await supabase.auth.setSession({ access_token, refresh_token });
+            }
+            resolve();
+          };
+
+          window.addEventListener('message', handler);
+
+          try {
+            window.opener.postMessage({ type: 'painel:ready' }, '*');
+          } catch {
+            clearTimeout(timeout);
+            window.removeEventListener('message', handler);
+            resolve();
+          }
+        });
+      }
+
+      const { data: { session } } = await supabase.auth.getSession();
+      setSession(session);
+      if (session?.user) fetchProfile(session.user.id);
+    };
+
+    initSession();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
