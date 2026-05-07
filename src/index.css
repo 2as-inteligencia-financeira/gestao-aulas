@@ -1,17 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;700;800&family=DM+Mono:wght@400;500&display=swap');
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* ── Luniq Design Tokens — Light ──────────────────── */
-  --amb:  #f59e0b;   /* amber — logo, accent, CTA primário */
-  --blk:  #f8f8f5;   /* base background — creme da marca */
-  --sur:  #fdfdfb;   /* surface — cards, painéis */
-  --rai:  #ffffff;   /* raised — inputs */
-  --bor:  #e7e5df;   /* border — dividers */
-  --dim:  #c8c6be;   /* dim — desabilitados */
-  --mut:  #7f7e76;   /* muted — texto terciário */
-  --txt:  #131311;   /* texto primário */
-  --grn:  #16a34a;   /* positivo / aprovado */
-  --red:  #dc2626;   /* alerta / reprovado */
+  /* ── Luniq Design Tokens — Dark ───────────────────── */
+  --amb:  #f59e0b;   /* amber — logo L, bordas accent, CTA */
+  --blk:  #050505;   /* base background */
+  --sur:  #0f0f0f;   /* surface — header, sidebar */
+  --rai:  #161616;   /* raised — cards, inputs */
+  --bor:  #1e1e1e;   /* border — dividers */
+  --dim:  #2a2a2a;   /* dim — borders secundários */
+  --mut:  #666666;   /* muted — texto terciário */
+  --txt:  #ffffff;   /* texto primário */
+  --grn:  #22c55e;   /* positivo / aprovado */
+  --red:  #ef4444;   /* alerta / reprovado */
 
   /* ── Aliases de componente ────────────────────────── */
   --bg:       var(--blk);
@@ -20,18 +22,18 @@
   --bg4:      var(--dim);
   --border:   var(--bor);
   --text:     var(--txt);
-  --text2:    #2e2e2a;
-  --text3:    #565650;
+  --text2:    #ffffff;
+  --text3:    #aaaaaa;
   --text4:    var(--mut);
   --accent:   var(--amb);
   --danger:   var(--red);
   --warning:  var(--amb);
-  --radius:   12px;
-  --shadow:   0 12px 30px rgba(15, 23, 42, .06);
+  --radius:   0px;
+  --shadow:   0 12px 30px rgba(0, 0, 0, 0.4);
 
   /* ── Tipografia ───────────────────────────────────── */
-  --ff: 'Roboto', 'Open Sans', 'Lato', system-ui, sans-serif;
-  --mo: 'Roboto', 'Open Sans', 'Lato', system-ui, sans-serif;
+  --ff: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --mo: 'DM Mono', monospace;
 }
 
 html, body, #root {
@@ -39,10 +41,17 @@ html, body, #root {
   background: var(--bg);
   color: var(--text2);
   font-family: var(--ff);
-  font-size: 15px;
-  line-height: 1.5;
+  font-size: 14px;
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
 }
+
+:focus-visible { outline: 2px solid var(--amb); outline-offset: 2px; }
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: var(--sur); }
+::-webkit-scrollbar-thumb { background: var(--dim); }
+::-webkit-scrollbar-thumb:hover { background: #3a3a3a; }
+::selection { background: rgba(245,158,11,.2); color: #fff; }
 
 /* ── Layout ─────────────────────────────────────────────── */
 
