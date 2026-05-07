@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800&amp;family=DM+Mono:wght@400&amp;display=swap');
+    </style>
+  </defs>
+  <rect width="300" height="90" fill="#fafaf7"/>
+
+  <!-- Wordmark: L (amber) + UNIQ -->
+  <text
+    font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif"
+    font-size="48" font-weight="800"
+    letter-spacing="-2"
+    y="56">
+    <tspan fill="#f59e0b" x="20">L</tspan><tspan fill="#0a0a0a">UNIQ</tspan>
+  </text>
+
+  <!-- Hairline divider -->
+  <line x1="20" y1="64" x2="268" y2="64"
+    stroke="#e4e4e0" stroke-width="0.75"/>
+
+  <!-- Descriptor: INTELIGENCIA FINANCEIRA -->
+  <text
+    x="20" y="78"
+    font-family="'DM Mono', monospace"
+    font-size="8.5" font-weight="400"
+    fill="#b8b8b4"
+    letter-spacing="3">INTELIGENCIA FINANCEIRA</text>
+
+</svg>
