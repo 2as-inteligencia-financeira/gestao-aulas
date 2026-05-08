@@ -1,4 +1,4 @@
-const KEY = 'luniq:gestao-aulas';
+const KEY = '2as:gestao-aulas';
 
 export function loadBoard() {
   try {

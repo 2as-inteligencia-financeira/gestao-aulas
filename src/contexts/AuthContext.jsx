@@ -4,8 +4,9 @@ import { supabase } from '../lib/supabase';
 
 // ALTO-02: origens autorizadas a enviar token via postMessage
 const TRUSTED_HUB_ORIGINS = [
-  'https://hub.luniqfinancas.com',
-  'https://app.luniqfinancas.com',
+  'https://hub.2asfinancas.com',
+  'https://hub.luniqfinancas.com', // legado — remover após migração DNS completa
+  'https://app.2asfinancas.com',
   ...(import.meta.env.DEV ? ['http://localhost:5173', 'http://localhost:3000'] : []),
 ];
 

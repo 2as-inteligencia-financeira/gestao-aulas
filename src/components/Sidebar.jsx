@@ -28,7 +28,7 @@ export function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="sidebar-brand">
-        <img src="/luniq-logo.svg" alt="Luniq" className="sidebar-logo" />
+        <span style={{ fontSize:20, fontWeight:800, letterSpacing:"-.04em" }}><span style={{ color:"#f59e0b" }}>2</span>AS</span>
       </div>
 
       <nav className="sidebar-nav">

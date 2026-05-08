@@ -3,7 +3,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* ── Luniq Design Tokens — Light (padrão) ─────────── */
+  /* ── 2AS Design Tokens — Light (padrão) ─────────── */
   --amb:  #f59e0b;   /* amber — logo L, accent, CTA */
   --blk:  #f8f8f5;   /* base background — creme da marca */
   --sur:  #fdfdfb;   /* surface — cards, painéis */
