@@ -1,5 +1,5 @@
 -- ============================================================
--- Gestão de Aulas — Luniq  |  Schema Supabase
+-- Gestão de Aulas — 2AS  |  Schema Supabase
 -- Execute este arquivo no SQL Editor do seu projeto Supabase
 -- ============================================================
 

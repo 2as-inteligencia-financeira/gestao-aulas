@@ -1,5 +1,7 @@
 # Perfis de acesso e dashboard
 
+> Contexto consolidado do projeto: veja também [contexto-atual.md](./contexto-atual.md).
+
 ## Perfis
 
 - Admin: acesso total, cria usuários, perfis, integrações e ajustes gerais do fluxo.

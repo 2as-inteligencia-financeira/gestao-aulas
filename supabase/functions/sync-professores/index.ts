@@ -2,7 +2,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 // ALTO-03: CORS restrito ao domínio do gestao-aulas
 const ALLOWED_ORIGINS = [
-  'https://aulas.luniqfinancas.com',
+  'https://aulas.2asfinancas.com',
   'http://localhost:5173',
   'http://localhost:5174',
 ];
